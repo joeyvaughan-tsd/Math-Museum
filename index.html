@@ -3,1233 +3,147 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
-<title>Math Museum</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; frame-src 'self'; img-src data:; base-uri 'none'; form-action 'none'">
+<meta name="description" content="Free classroom math games with no ads, accounts, or tracking.">
+<title>Math Games</title>
 <style>
-  :root {
-    --wall: #E8ECF1;
-    --paper: #FFFFFF;
-    --ink: #17212B;
-    --muted: #46515D;
-    --navy: #1F3A5F;
-    --navy-soft: #E3EAF4;
-    --pink: #B5179E;
-    --hint-bg: #FAE8F4;
-    --ok: #176234;
-    --ok-bg: #E7F4EC;
-    --no: #9B1C1F;
-    --no-bg: #FBECEC;
-    --info: #234A7A;
-    --info-bg: #E8F0FA;
-    --line: #9AA6B2;
-  }
+  :root { --ink: #14202B; --muted: #44505C; --paper: #FFFFFF; --blue: #1B63D6; --coral: #C93A14; --line: #8C99A6; }
   * { box-sizing: border-box; }
-  html { font-size: 100%; }
+  html, body { height: 100%; margin: 0; }
   body {
-    margin: 0;
-    background: var(--wall);
-    color: var(--ink);
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    font-size: 1.25rem;
-    line-height: 1.5;
+    min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column;
+    background: linear-gradient(180deg, #D9F0FF 0%, #FFF6D8 100%) fixed; color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 1.15rem; line-height: 1.45;
   }
-  .skip {
-    position: absolute; left: 0.5rem; top: -4rem;
-    background: var(--paper); color: var(--navy);
-    padding: 0.5rem 1rem; border: 3px solid var(--navy); z-index: 10;
-  }
+  [hidden] { display: none !important; }
+  a, button { font: inherit; }
+  a:focus-visible, button:focus-visible { outline: 4px solid var(--ink); outline-offset: 3px; box-shadow: 0 0 0 7px #FFFFFF; }
+  .skip { position: absolute; left: 0.5rem; top: -4rem; background: var(--paper); color: var(--blue); padding: 0.5rem 1rem; border: 3px solid var(--blue); z-index: 50; }
   .skip:focus { top: 0.5rem; }
 
-  .masthead {
-    background: var(--navy);
-    color: #FFFFFF;
-    border-bottom: 6px solid var(--pink);
-    padding: 1.25rem 1rem 1.1rem;
-  }
-  .masthead-inner, main, footer { max-width: 46rem; margin: 0 auto; }
-  h1, h2, h3, legend.big {
-    font-family: Georgia, "Times New Roman", serif;
-    line-height: 1.2;
-  }
-  h1 { margin: 0 0 0.25rem; font-size: 2rem; letter-spacing: 0.01em; }
-  .masthead p { margin: 0; font-size: 1.1rem; }
+  .bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem; background: var(--paper);
+    border-bottom: 6px solid; border-image: linear-gradient(90deg, #FF4D4D, #FF9F1C, #FFD43B, #4CD964, #3AA0FF, #8A5CF6) 1; }
+  .brand { font-weight: 800; font-size: 1.3rem; margin-right: 0.5rem; }
+  .bar nav { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .spacer { flex: 1 1 auto; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 2.9rem; padding: 0.2rem 1rem; font-weight: 700;
+    color: var(--ink); background: var(--paper); border: 2px solid var(--ink); border-radius: 0.5rem; cursor: pointer; text-decoration: none; }
+  .btn[aria-current="page"] { background: var(--ink); color: #FFFFFF; }
+  .btn.util { background: #FFF3C4; }
 
-  main { padding: 1rem; }
-  nav[aria-label="Exhibits"] {
-    display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.25rem 0 1rem;
-  }
-  nav button {
-    flex: 1 1 9rem;
-    min-height: 3rem;
-    padding: 0.5rem 0.75rem;
-    font: inherit; font-size: 1.05rem;
-    background: var(--paper); color: var(--navy);
-    border: 2px solid var(--navy); border-radius: 0.4rem;
-    cursor: pointer;
-  }
-  nav button[aria-current="true"] {
-    background: var(--navy); color: #FFFFFF;
-  }
+  main { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; }
+  #home { padding: 1.25rem 1rem 2.5rem; max-width: 62rem; width: 100%; margin: 0 auto; }
+  h1 { font-size: 2.2rem; line-height: 1.15; margin: 0 0 0.4rem; }
+  .lead { margin: 0 0 1.4rem; color: var(--muted); }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 1rem; }
+  .card { display: flex; flex-direction: column; background: var(--paper); border: 3px solid var(--ink); border-radius: 0.9rem; padding: 1.1rem 1.2rem 1.2rem; }
+  .card.c1 { border-top: 12px solid var(--coral); }
+  .card.c2 { border-top: 12px solid var(--blue); }
+  .card h2 { margin: 0 0 0.3rem; font-size: 1.5rem; }
+  .card p { margin: 0 0 0.6rem; }
+  .tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0 0 0.9rem; padding: 0; list-style: none; }
+  .tags li { background: #EEF3F9; border: 1px solid var(--line); border-radius: 1rem; padding: 0.05rem 0.65rem; font-size: 0.95rem; }
+  .card .btn { margin-top: auto; font-size: 1.25rem; min-height: 3.4rem; background: var(--blue); border-color: var(--blue); color: #FFFFFF; }
+  .card.c1 .btn { background: var(--coral); border-color: var(--coral); }
+  .fine { color: var(--muted); font-size: 0.95rem; margin-top: 1.4rem; }
 
-  .exhibit {
-    background: var(--paper);
-    border: 2px solid var(--ink);
-    outline: 6px solid var(--paper);
-    box-shadow: 0 0 0 8px var(--pink);
-    margin: 0.5rem 8px 2.5rem;
-    padding: 1.25rem;
-  }
-  .exhibit h2 { margin: 0 0 0.5rem; font-size: 1.75rem; }
-  .exhibit h2:focus { outline: none; }
-  .progress {
-    display: block; margin-top: 0.2rem;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    font-size: 1.05rem; font-weight: 400; color: var(--muted);
-  }
-  .problem { margin: 0 0 1.25rem; font-size: 1.3rem; }
-
-  fieldset { border: 0; padding: 0; margin: 0 0 1.5rem; min-width: 0; }
-  legend { padding: 0; font-weight: 700; font-size: 1.2rem; margin-bottom: 0.6rem; }
-
-  .choice {
-    display: flex; align-items: flex-start; gap: 0.75rem;
-    padding: 0.75rem;
-    margin-bottom: 0.5rem;
-    border: 2px solid var(--line);
-    border-radius: 0.4rem;
-    cursor: pointer;
-    background: var(--paper);
-  }
-  .choice:hover { border-color: var(--navy); }
-  .choice:has(input:checked) { border-color: var(--navy); background: var(--navy-soft); }
-  .choice:focus-within { outline: 4px solid var(--navy); outline-offset: 2px; }
-  .choice input[type="radio"] {
-    width: 1.5rem; height: 1.5rem; margin: 0.2rem 0 0; flex: none;
-    accent-color: var(--navy);
-  }
-  .choice .num { font-weight: 700; color: var(--pink); flex: none; }
-  .choice .txt { overflow-wrap: anywhere; }
-
-  .field-label { display: block; font-weight: 700; margin-bottom: 0.4rem; }
-  .field-note { margin: 0 0 0.5rem; color: var(--muted); font-size: 1.05rem; }
-  input[type="text"] {
-    width: 100%; min-height: 3rem; padding: 0.5rem 0.75rem;
-    font: inherit; color: var(--ink); background: var(--paper);
-    border: 2px solid var(--ink); border-radius: 0.4rem;
-  }
-
-  .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 1.25rem; }
-  .actions button {
-    min-height: 3rem; padding: 0.5rem 1.1rem;
-    font: inherit; font-weight: 700;
-    border-radius: 0.4rem; cursor: pointer;
-    border: 2px solid var(--navy);
-    background: var(--paper); color: var(--navy);
-  }
-  .actions button.primary { background: var(--navy); color: #FFFFFF; }
-  .actions button:hover { filter: brightness(0.95); }
-
-  button:focus-visible, input[type="text"]:focus-visible, a:focus-visible {
-    outline: 4px solid var(--navy); outline-offset: 3px;
-    box-shadow: 0 0 0 7px #FFFFFF;
-  }
-  .masthead a:focus-visible { outline-color: #FFFFFF; }
-
-  .hint {
-    background: var(--hint-bg);
-    border-left: 8px solid var(--pink);
-    padding: 0.75rem 1rem; margin-bottom: 1.25rem;
-  }
-  .hint p { margin: 0; }
-
-  #feedback:focus, #feedback h3:focus { outline: none; }
-  .result {
-    border-left: 8px solid; padding: 0.6rem 0.9rem; margin: 0 0 0.6rem;
-  }
-  .result p { margin: 0; }
-  .result strong { display: block; }
-  .result.ok { background: var(--ok-bg); border-color: var(--ok); }
-  .result.ok strong { color: var(--ok); }
-  .result.no { background: var(--no-bg); border-color: var(--no); }
-  .result.no strong { color: var(--no); }
-  .result.info { background: var(--info-bg); border-color: var(--info); }
-  .result.info strong { color: var(--info); }
-  #feedback h3 { margin: 0 0 0.6rem; font-size: 1.3rem; }
-
-  .solution {
-    border: 2px dashed var(--pink);
-    padding: 1rem; margin-top: 1rem; background: #FFFFFF;
-  }
-  .solution h3 { margin: 0 0 0.5rem; font-size: 1.3rem; }
-  .solution ol { margin: 0 0 0.75rem; padding-left: 1.5rem; }
-  .solution li { margin-bottom: 0.25rem; }
-  .solution p { margin: 0; }
-  fieldset:disabled { opacity: 0.55; }
-  fieldset:disabled .choice { cursor: not-allowed; }
-  [hidden] { display: none !important; }
-
-  footer { padding: 0 1rem 2rem; font-size: 1rem; color: var(--muted); }
-
-  @media (max-width: 520px) {
-    body { font-size: 1.15rem; }
-    h1 { font-size: 1.6rem; }
-    .exhibit { padding: 1rem; margin-left: 6px; margin-right: 6px; }
-    .actions button { flex: 1 1 100%; }
-  }
+  #stage { flex: 1 1 auto; position: relative; min-height: 60vh; background: #FFFFFF; }
+  #frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #FFFFFF; }
+  #help { margin: 0; padding: 0.35rem 0.75rem; font-size: 0.95rem; color: var(--muted); background: var(--paper); border-top: 1px solid var(--line); }
+  @media (max-width: 520px) { h1 { font-size: 1.8rem; } .brand { width: 100%; } }
 </style>
 </head>
 <body>
-<a class="skip" href="#exhibit">Skip to the exhibit</a>
+<a class="skip" href="#main">Skip to content</a>
 
-<header class="masthead">
-  <div class="masthead-inner">
-    <h1>Math Museum</h1>
-    <p>Read the problem carefully and determine if it has any mistakes. If it does, identify and correct them.</p>
-  </div>
+<header class="bar">
+  <a class="brand btn" href="#" id="homeLink" style="border:0;min-height:auto;padding:0;background:none">Math Games</a>
+  <nav aria-label="Games" id="gameNav" hidden>
+    <a class="btn" href="#museum" data-game="museum">Math Museum</a>
+    <a class="btn" href="#tug" data-game="tug">Math Tug of War</a>
+  </nav>
+  <span class="spacer"></span>
+  <button type="button" class="btn util" id="btnFull" hidden>Full screen</button>
+  <a class="btn util" id="btnNew" href="#" target="_blank" rel="noopener" hidden>Open in new tab</a>
 </header>
 
-<main>
-  <noscript><p class="result no"><strong>JavaScript is turned off.</strong> This page needs JavaScript to show the exhibits. Please turn it on in your browser settings.</p></noscript>
-  <nav aria-label="Exhibits" id="nav"></nav>
-  <article class="exhibit" id="exhibit" aria-labelledby="exhibit-title"></article>
+<main id="main">
+  <section id="home" aria-labelledby="home-title">
+    <h1 id="home-title">Math Games</h1>
+    <p class="lead">Free classroom games for Pre-K through Grade 6. They run in the browser with no ads, accounts, or tracking.</p>
+    <div class="cards">
+      <article class="card c1">
+        <h2>Math Museum</h2>
+        <p>Read each worked problem and decide whether it has a mistake. Students find the error, explain why, and correct it, or choose &ldquo;No errors.&rdquo;</p>
+        <ul class="tags" aria-label="Topics"><li>Order of operations</li><li>Regrouping</li><li>Fractions</li><li>Word problems</li><li>Mixed</li></ul>
+        <a class="btn" href="#museum" data-game="museum">Play Math Museum</a>
+      </article>
+      <article class="card c2">
+        <h2>Math Tug of War</h2>
+        <p>Two teams, or one student against the computer, pull the rope with correct answers. The losing team falls in the mud. Teachers can set the time limit and add their own questions.</p>
+        <ul class="tags" aria-label="Topics"><li>Pre-K to Grade 6</li><li>+ &minus; &times; &divide;</li><li>Fractions and decimals</li><li>Patterns and missing numbers</li><li>Your own questions</li></ul>
+        <a class="btn" href="#tug" data-game="tug">Play Tug of War</a>
+      </article>
+    </div>
+    <p class="fine">Tip: on an iPad or interactive whiteboard, choose &ldquo;Full screen&rdquo; after the game opens.</p>
+  </section>
+
+  <section id="stage" hidden aria-label="Game">
+    <iframe id="frame" title="Game" allow="fullscreen" referrerpolicy="no-referrer"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+  </section>
+  <p id="help" hidden>If the game does not appear, use &ldquo;Open in new tab.&rdquo;</p>
 </main>
 
-<footer>
-  <p>Each exhibit has 200 problems. This page works offline. It does not save anything, ask for names, or send information anywhere. All students and problems are made up.</p>
-</footer>
+<noscript><p style="padding:1rem">JavaScript is turned off. Open a game directly: <a href="math-museum.html">Math Museum</a> or <a href="math-tug-of-war.html">Math Tug of War</a>.</p></noscript>
 
 <script>
 (function () {
   'use strict';
+  var GAMES = {
+    museum: { title: 'Math Museum', src: 'math-museum.html' },
+    tug: { title: 'Math Tug of War', src: 'math-tug-of-war.html' }
+  };
+  var $ = function (id) { return document.getElementById(id); };
+  var current = null;
 
-  /* ---------- Problem generators: 50 problems per exhibit ---------- */
-  var PROBLEMS_PER_EXHIBIT = 200;
-
-  function gcd(a, b) { while (b) { var t = b; b = a % b; a = t; } return a; }
-  function lcm(a, b) { return a / gcd(a, b) * b; }
-
-  // Steps through a list of cases in a scrambled but repeatable order, so the 50 problems never repeat.
-  function pickIndex(i, total, stride) {
-    var s = stride;
-    while (gcd(s, total) !== 1) { s += 1; }
-    return (i * s) % total;
-  }
-
-  // Moves the correct explanation to a different position from problem to problem.
-  function arrange(correct, wrongs, i) {
-    var list = [correct].concat(wrongs);
-    var shift = i % list.length;
-    var out = [];
-    for (var k = 0; k < list.length; k++) { out.push(list[(k + shift) % list.length]); }
-    return out;
-  }
-
-  // Exhibit 1: order of operations. Eight kinds of expressions, each with one deliberate error.
-  var X = '\u00D7', D = '\u00F7', M = '\u2212';
-  var OOP_TYPES = 8;
-  var OOP_CASES = (function () {
-    var L = [[], [], [], [], [], [], [], []];
-    var a, b, c, d, m, n;
-    for (a = 2; a <= 9; a++) {
-      for (b = 2; b <= 9; b++) {
-        for (c = 2; c <= 9; c++) {
-          if (a !== b && a !== c && b !== c) {
-            L[0].push([a, b, c]);                       // a + b x c
-            L[3].push([a, b, c]);                       // a x (b + c)
-            for (d = 2; d <= 9; d++) {
-              if (d !== a && d !== b && d !== c) { L[6].push([a, b, c, d]); }  // a + b x c - d
-            }
-          }
-        }
-      }
-    }
-    for (a = 12; a <= 30; a++) {                        // a - b + c
-      for (b = 2; b <= 9; b++) {
-        for (c = 2; c <= 9; c++) { if (b !== c && a > b + c) { L[1].push([a, b, c]); } }
-      }
-    }
-    for (b = 2; b <= 6; b++) {                          // a / b x c, where a = b x c x m
-      for (c = 2; c <= 6; c++) {
-        for (m = 1; m <= 6; m++) { if (b !== c && b * c * m <= 100) { L[2].push([b * c * m, b, c]); } }
-      }
-    }
-    for (b = 2; b <= 6; b++) {                          // (a - b) x c
-      for (c = 2; c <= 6; c++) {
-        for (a = 10; a <= 40; a++) { if (b !== c && a > b * c) { L[4].push([a, b, c]); } }
-      }
-    }
-    for (c = 2; c <= 6; c++) {                          // a + b / c, where a = c x n and b = c x m
-      for (n = 1; n <= 8; n++) {
-        for (m = 1; m <= 8; m++) { if (n !== m) { L[5].push([c * n, c * m, c]); } }
-      }
-    }
-    for (a = 2; a <= 9; a++) {                          // a x b - c x d
-      for (b = 2; b <= 9; b++) {
-        for (c = 2; c <= 6; c++) {
-          for (d = 2; d <= 6; d++) { if (a !== b && c !== d && a * b > c * d) { L[7].push([a, b, c, d]); } }
-        }
-      }
-    }
-    return L;
-  })();
-
-  function oopSteps(sp) {
-    var E = sp.errorIndex, last = sp.steps.length - 1;
-    return sp.steps.map(function (text, n) {
-      var why;
-      if (n === 0) { why = 'Step 1 is correct. ' + (sp.firstNote || 'It is the original expression.'); }
-      else if (n < E) { why = 'Step ' + (n + 1) + ' is correct. ' + sp.okNote; }
-      else if (n === E) { why = 'This is the error. ' + sp.errorWhy; }
-      else if (n === last) { why = 'This step only states the result. The result is incorrect because of the error in step ' + (E + 1) + '.'; }
-      else { why = 'This step follows from step ' + (E + 1) + '. Its computation is consistent, but the result is incorrect because of the error in step ' + (E + 1) + '.'; }
-      return { text: text, why: why };
+  function route() {
+    var key = (location.hash || '').replace('#', '');
+    var game = GAMES.hasOwnProperty(key) ? key : null;
+    var frame = $('frame');
+    if (game === current) { return; }
+    current = game;
+    var playing = !!game;
+    $('home').hidden = playing;
+    $('stage').hidden = !playing;
+    $('help').hidden = !playing;
+    $('gameNav').hidden = !playing;
+    $('btnNew').hidden = !playing;
+    $('btnFull').hidden = !(playing && frame.requestFullscreen);
+    Array.prototype.forEach.call(document.querySelectorAll('#gameNav a'), function (a) {
+      if (a.getAttribute('data-game') === game) { a.setAttribute('aria-current', 'page'); } else { a.removeAttribute('aria-current'); }
     });
+    if (playing) {
+      // The game loads only when it is chosen, so the page opens fast.
+      frame.title = GAMES[game].title;
+      frame.src = GAMES[game].src;
+      $('btnNew').href = GAMES[game].src;
+      document.title = GAMES[game].title + ' \u2013 Math Games';
+      frame.focus();
+    } else {
+      frame.removeAttribute('src');
+      document.title = 'Math Games';
+      window.scrollTo(0, 0);
+    }
   }
 
-  function finishOOP(sp, i) {
-    var acc = sp.accepted.slice();
-    if (sp.value >= 10) { acc.push(String(sp.value)); }
-    return {
-      problem: 'A student evaluated ' + sp.expr + ' and found a value of ' + sp.wrong + '. Examine the steps.',
-      problemCorrect: 'A student evaluated ' + sp.expr + ' and found a value of ' + sp.value + '. Examine the steps.',
-      steps: oopSteps(sp),
-      mistake: sp.errorIndex,
-      hint: sp.hint,
-      explanations: arrange(
-        { text: sp.correct.text, correct: true, response: sp.correct.response },
-        sp.wrongs.map(function (w) { return { text: w.text, correct: false, response: w.response }; }),
-        i),
-      accepted: acc,
-      corrected: sp.corrected,
-      reasoning: sp.reasoning
-    };
-  }
-
-  var OOP_BUILDERS = [
-    // 0: a + b x c, with the addition performed first
-    function (cs) {
-      var a = cs[0], b = cs[1], c = cs[2], p = b * c, s = a + b, W = s * c, V = a + p;
-      var expr = a + ' + ' + b + ' ' + X + ' ' + c;
-      return {
-        expr: expr, wrong: W, value: V, errorIndex: 1,
-        steps: [expr, 'Add first: ' + a + ' + ' + b + ' = ' + s + '.', s + ' ' + X + ' ' + c + ' = ' + W + '.', 'The value of the expression is ' + W + '.'],
-        errorWhy: 'Multiplication is performed before addition, so ' + b + ' ' + X + ' ' + c + ' must be evaluated first.',
-        hint: 'Which operation has priority, addition or multiplication?',
-        correct: { text: 'Multiplication has priority over addition, so ' + b + ' ' + X + ' ' + c + ' must be evaluated first.',
-                   response: 'Correct. By the order of operations, ' + b + ' ' + X + ' ' + c + ' = ' + p + ' comes first, and then ' + a + ' + ' + p + ' = ' + V + '.' },
-        wrongs: [
-          { text: 'The expression needs parentheses around ' + a + ' + ' + b + '.',
-            response: 'The expression has no parentheses to add. Without them, the order of operations decides which operation comes first.' },
-          { text: s + ' ' + X + ' ' + c + ' does not equal ' + W + '.',
-            response: s + ' ' + X + ' ' + c + ' does equal ' + W + '. The multiplication is computed correctly. The error occurred earlier.' }
-        ],
-        accepted: [b + '*' + c, a + '+' + p, p + '+' + a],
-        corrected: [expr, 'Multiply first: ' + b + ' ' + X + ' ' + c + ' = ' + p, a + ' + ' + p + ' = ' + V, 'The value of the expression is ' + V + '.'],
-        reasoning: 'The order of operations says to perform multiplication and division before addition and subtraction. Evaluating ' + b + ' ' + X + ' ' + c + ' first gives ' + p + ', and ' + a + ' + ' + p + ' = ' + V + '.'
-      };
-    },
-    // 1: a - b + c, with the addition performed first
-    function (cs) {
-      var a = cs[0], b = cs[1], c = cs[2], s = b + c, W = a - s, d = a - b, V = d + c;
-      var expr = a + ' ' + M + ' ' + b + ' + ' + c;
-      return {
-        expr: expr, wrong: W, value: V, errorIndex: 1,
-        steps: [expr, 'Add first: ' + b + ' + ' + c + ' = ' + s + '.', a + ' ' + M + ' ' + s + ' = ' + W + '.', 'The value of the expression is ' + W + '.'],
-        errorWhy: 'Addition and subtraction have equal priority, so they are performed from left to right. ' + a + ' ' + M + ' ' + b + ' must be evaluated first.',
-        hint: 'Do addition and subtraction have equal priority? In which direction are operations of equal priority evaluated?',
-        correct: { text: 'Addition and subtraction have equal priority, so they are performed from left to right: ' + a + ' ' + M + ' ' + b + ' comes first.',
-                   response: 'Correct. ' + a + ' ' + M + ' ' + b + ' = ' + d + ', and then ' + d + ' + ' + c + ' = ' + V + '.' },
-        wrongs: [
-          { text: 'The expression should be evaluated from right to left.',
-            response: 'Operations of equal priority are evaluated from left to right, not right to left.' },
-          { text: a + ' ' + M + ' ' + s + ' does not equal ' + W + '.',
-            response: a + ' ' + M + ' ' + s + ' does equal ' + W + '. The subtraction is computed correctly. The error occurred earlier.' }
-        ],
-        accepted: [a + '-' + b, d + '+' + c],
-        corrected: [expr, 'Evaluate from left to right: ' + a + ' ' + M + ' ' + b + ' = ' + d, d + ' + ' + c + ' = ' + V, 'The value of the expression is ' + V + '.'],
-        reasoning: 'Operations of equal priority are performed from left to right. ' + a + ' ' + M + ' ' + b + ' = ' + d + ', and ' + d + ' + ' + c + ' = ' + V + '.'
-      };
-    },
-    // 2: a / b x c, with the multiplication performed first
-    function (cs) {
-      var a = cs[0], b = cs[1], c = cs[2], p = b * c, W = a / p, e = a / b, V = e * c;
-      var expr = a + ' ' + D + ' ' + b + ' ' + X + ' ' + c;
-      return {
-        expr: expr, wrong: W, value: V, errorIndex: 1,
-        steps: [expr, 'Multiply first: ' + b + ' ' + X + ' ' + c + ' = ' + p + '.', a + ' ' + D + ' ' + p + ' = ' + W + '.', 'The value of the expression is ' + W + '.'],
-        errorWhy: 'Multiplication and division have equal priority, so they are performed from left to right. ' + a + ' ' + D + ' ' + b + ' must be evaluated first.',
-        hint: 'Do multiplication and division have equal priority? In which direction are operations of equal priority evaluated?',
-        correct: { text: 'Multiplication and division have equal priority, so they are performed from left to right: ' + a + ' ' + D + ' ' + b + ' comes first.',
-                   response: 'Correct. ' + a + ' ' + D + ' ' + b + ' = ' + e + ', and then ' + e + ' ' + X + ' ' + c + ' = ' + V + '.' },
-        wrongs: [
-          { text: 'Multiplication must always be performed after division.',
-            response: 'Multiplication does not always follow division. Operations of equal priority are performed from left to right.' },
-          { text: a + ' ' + D + ' ' + p + ' does not equal ' + W + '.',
-            response: a + ' ' + D + ' ' + p + ' does equal ' + W + '. The division is computed correctly. The error occurred earlier.' }
-        ],
-        accepted: [a + '/' + b, e + '*' + c],
-        corrected: [expr, 'Evaluate from left to right: ' + a + ' ' + D + ' ' + b + ' = ' + e, e + ' ' + X + ' ' + c + ' = ' + V, 'The value of the expression is ' + V + '.'],
-        reasoning: 'Operations of equal priority are performed from left to right. ' + a + ' ' + D + ' ' + b + ' = ' + e + ', and ' + e + ' ' + X + ' ' + c + ' = ' + V + '.'
-      };
-    },
-    // 3: a x (b + c), with the parentheses ignored
-    function (cs) {
-      var a = cs[0], b = cs[1], c = cs[2], s = b + c, V = a * s, p = a * b, W = p + c;
-      var expr = a + ' ' + X + ' (' + b + ' + ' + c + ')';
-      return {
-        expr: expr, wrong: W, value: V, errorIndex: 1,
-        steps: [expr, 'Multiply first: ' + a + ' ' + X + ' ' + b + ' = ' + p + '.', p + ' + ' + c + ' = ' + W + '.', 'The value of the expression is ' + W + '.'],
-        errorWhy: 'The parentheses group ' + b + ' + ' + c + ', so the operation inside the parentheses must be evaluated first.',
-        hint: 'Look at the parentheses. Which operation must be evaluated first?',
-        correct: { text: 'Operations inside parentheses must be evaluated first, so ' + b + ' + ' + c + ' must be computed before multiplying by ' + a + '.',
-                   response: 'Correct. ' + b + ' + ' + c + ' = ' + s + ', and then ' + a + ' ' + X + ' ' + s + ' = ' + V + '.' },
-        wrongs: [
-          { text: 'The expression should be evaluated strictly from left to right.',
-            response: 'Left to right applies only to operations of equal priority. Parentheses require the operation inside them to be evaluated first.' },
-          { text: p + ' + ' + c + ' does not equal ' + W + '.',
-            response: p + ' + ' + c + ' does equal ' + W + '. The addition is computed correctly. The error occurred earlier.' }
-        ],
-        accepted: [a + '*' + s, b + '+' + c, a + '*' + b + '+' + a + '*' + c],
-        corrected: [expr, 'Evaluate inside the parentheses first: ' + b + ' + ' + c + ' = ' + s, a + ' ' + X + ' ' + s + ' = ' + V, 'The value of the expression is ' + V + '.'],
-        reasoning: 'Operations inside parentheses are evaluated first: ' + b + ' + ' + c + ' = ' + s + '. Then ' + a + ' ' + X + ' ' + s + ' = ' + V + '.'
-      };
-    },
-    // 4: (a - b) x c, with the parentheses ignored
-    function (cs) {
-      var a = cs[0], b = cs[1], c = cs[2], p = b * c, W = a - p, d = a - b, V = d * c;
-      var expr = '(' + a + ' ' + M + ' ' + b + ') ' + X + ' ' + c;
-      return {
-        expr: expr, wrong: W, value: V, errorIndex: 1,
-        steps: [expr, 'Multiply first: ' + b + ' ' + X + ' ' + c + ' = ' + p + '.', a + ' ' + M + ' ' + p + ' = ' + W + '.', 'The value of the expression is ' + W + '.'],
-        errorWhy: 'The parentheses group ' + a + ' ' + M + ' ' + b + ', so the subtraction inside the parentheses must be evaluated first.',
-        hint: 'Look at the parentheses. Which operation must be evaluated first?',
-        correct: { text: 'Operations inside parentheses must be evaluated first, so ' + a + ' ' + M + ' ' + b + ' must be computed before multiplying by ' + c + '.',
-                   response: 'Correct. ' + a + ' ' + M + ' ' + b + ' = ' + d + ', and then ' + d + ' ' + X + ' ' + c + ' = ' + V + '.' },
-        wrongs: [
-          { text: 'Subtraction must always be performed after multiplication.',
-            response: 'Without parentheses that would be true, but here the parentheses require ' + a + ' ' + M + ' ' + b + ' to be evaluated first.' },
-          { text: a + ' ' + M + ' ' + p + ' does not equal ' + W + '.',
-            response: a + ' ' + M + ' ' + p + ' does equal ' + W + '. The subtraction is computed correctly. The error occurred earlier.' }
-        ],
-        accepted: [d + '*' + c, a + '-' + b],
-        corrected: [expr, 'Evaluate inside the parentheses first: ' + a + ' ' + M + ' ' + b + ' = ' + d, d + ' ' + X + ' ' + c + ' = ' + V, 'The value of the expression is ' + V + '.'],
-        reasoning: 'Operations inside parentheses are evaluated first: ' + a + ' ' + M + ' ' + b + ' = ' + d + '. Then ' + d + ' ' + X + ' ' + c + ' = ' + V + '.'
-      };
-    },
-    // 5: a + b / c, with the addition performed first
-    function (cs) {
-      var a = cs[0], b = cs[1], c = cs[2], s = a + b, W = s / c, q = b / c, V = a + q;
-      var expr = a + ' + ' + b + ' ' + D + ' ' + c;
-      return {
-        expr: expr, wrong: W, value: V, errorIndex: 1,
-        steps: [expr, 'Add first: ' + a + ' + ' + b + ' = ' + s + '.', s + ' ' + D + ' ' + c + ' = ' + W + '.', 'The value of the expression is ' + W + '.'],
-        errorWhy: 'Division is performed before addition, so ' + b + ' ' + D + ' ' + c + ' must be evaluated first.',
-        hint: 'Which operation has priority, addition or division?',
-        correct: { text: 'Division has priority over addition, so ' + b + ' ' + D + ' ' + c + ' must be evaluated first.',
-                   response: 'Correct. ' + b + ' ' + D + ' ' + c + ' = ' + q + ', and then ' + a + ' + ' + q + ' = ' + V + '.' },
-        wrongs: [
-          { text: 'The expression needs parentheses around ' + a + ' + ' + b + '.',
-            response: 'The expression has no parentheses to add. Without them, the order of operations decides which operation comes first.' },
-          { text: s + ' ' + D + ' ' + c + ' does not equal ' + W + '.',
-            response: s + ' ' + D + ' ' + c + ' does equal ' + W + '. The division is computed correctly. The error occurred earlier.' }
-        ],
-        accepted: [b + '/' + c, a + '+' + q, q + '+' + a],
-        corrected: [expr, 'Divide first: ' + b + ' ' + D + ' ' + c + ' = ' + q, a + ' + ' + q + ' = ' + V, 'The value of the expression is ' + V + '.'],
-        reasoning: 'The order of operations says to perform multiplication and division before addition and subtraction. Evaluating ' + b + ' ' + D + ' ' + c + ' first gives ' + q + ', and ' + a + ' + ' + q + ' = ' + V + '.'
-      };
-    },
-    // 6: a + b x c - d, with the addition performed first
-    function (cs) {
-      var a = cs[0], b = cs[1], c = cs[2], d = cs[3], s = a + b, W = s * c - d, p = b * c, V = a + p - d;
-      var expr = a + ' + ' + b + ' ' + X + ' ' + c + ' ' + M + ' ' + d;
-      return {
-        expr: expr, wrong: W, value: V, errorIndex: 1,
-        steps: [expr, 'Add first: ' + a + ' + ' + b + ' = ' + s + '.', s + ' ' + X + ' ' + c + ' ' + M + ' ' + d + ' = ' + W + '.', 'The value of the expression is ' + W + '.'],
-        errorWhy: 'Multiplication is performed before addition and subtraction, so ' + b + ' ' + X + ' ' + c + ' must be evaluated first.',
-        hint: 'Which operation has priority: addition, subtraction, or multiplication?',
-        correct: { text: 'Multiplication has priority over addition and subtraction, so ' + b + ' ' + X + ' ' + c + ' must be evaluated first.',
-                   response: 'Correct. ' + b + ' ' + X + ' ' + c + ' = ' + p + '. Then, from left to right, ' + a + ' + ' + p + ' ' + M + ' ' + d + ' = ' + V + '.' },
-        wrongs: [
-          { text: 'The subtraction of ' + d + ' should be performed first.',
-            response: 'Subtraction does not have priority here. Multiplication is performed first, and then addition and subtraction are performed from left to right.' },
-          { text: s + ' ' + X + ' ' + c + ' ' + M + ' ' + d + ' does not equal ' + W + '.',
-            response: s + ' ' + X + ' ' + c + ' ' + M + ' ' + d + ' does equal ' + W + '. That computation is correct, but it depends on the error in step 2.' }
-        ],
-        accepted: [b + '*' + c, a + '+' + p],
-        corrected: [expr, 'Multiply first: ' + b + ' ' + X + ' ' + c + ' = ' + p, a + ' + ' + p + ' ' + M + ' ' + d + ' = ' + V, 'The value of the expression is ' + V + '.'],
-        reasoning: 'Multiplication is performed before addition and subtraction. ' + b + ' ' + X + ' ' + c + ' = ' + p + ', and then ' + a + ' + ' + p + ' ' + M + ' ' + d + ' = ' + V + '.'
-      };
-    },
-    // 7: a x b - c x d, with the first error in step 3
-    function (cs) {
-      var a = cs[0], b = cs[1], c = cs[2], d = cs[3], p = a * b, q = c * d, s = p - c, W = s * d, V = p - q;
-      var expr = a + ' ' + X + ' ' + b + ' ' + M + ' ' + c + ' ' + X + ' ' + d;
-      return {
-        expr: expr, wrong: W, value: V, errorIndex: 2,
-        okNote: 'The product ' + a + ' ' + X + ' ' + b + ' is evaluated before the subtraction.',
-        steps: [expr, 'Multiply: ' + a + ' ' + X + ' ' + b + ' = ' + p + '.', 'Subtract: ' + p + ' ' + M + ' ' + c + ' = ' + s + '.', 'Multiply: ' + s + ' ' + X + ' ' + d + ' = ' + W + '.', 'The value of the expression is ' + W + '.'],
-        errorWhy: 'Multiplication is performed before subtraction, so ' + c + ' ' + X + ' ' + d + ' must be evaluated before the subtraction.',
-        hint: 'Which operations must be completed before the subtraction?',
-        correct: { text: 'Multiplication has priority over subtraction, so ' + c + ' ' + X + ' ' + d + ' must be evaluated before subtracting.',
-                   response: 'Correct. ' + a + ' ' + X + ' ' + b + ' = ' + p + ' and ' + c + ' ' + X + ' ' + d + ' = ' + q + ', so ' + p + ' ' + M + ' ' + q + ' = ' + V + '.' },
-        wrongs: [
-          { text: 'The product ' + a + ' ' + X + ' ' + b + ' is computed incorrectly.',
-            response: a + ' ' + X + ' ' + b + ' = ' + p + ' is computed correctly. The error is in a later step.' },
-          { text: 'The difference ' + p + ' ' + M + ' ' + c + ' is computed incorrectly.',
-            response: p + ' ' + M + ' ' + c + ' = ' + s + ' is computed correctly, but it is the wrong operation to perform at that point. ' + c + ' ' + X + ' ' + d + ' must be evaluated first.' }
-        ],
-        accepted: [c + '*' + d, p + '-' + q],
-        corrected: [expr, 'Multiply: ' + a + ' ' + X + ' ' + b + ' = ' + p, 'Multiply: ' + c + ' ' + X + ' ' + d + ' = ' + q, 'Subtract: ' + p + ' ' + M + ' ' + q + ' = ' + V, 'The value of the expression is ' + V + '.'],
-        reasoning: 'Multiplication is performed before subtraction. ' + a + ' ' + X + ' ' + b + ' = ' + p + ' and ' + c + ' ' + X + ' ' + d + ' = ' + q + ', so ' + p + ' ' + M + ' ' + q + ' = ' + V + '.'
-      };
-    }
-  ];
-
-  function makeOrderOfOperations(i) {
-    var type = i % OOP_TYPES;
-    var list = OOP_CASES[type];
-    var cs = list[pickIndex(Math.floor(i / OOP_TYPES), list.length, 7)];
-    return finishOOP(OOP_BUILDERS[type](cs), i);
-  }
-
-  // Exhibit 2: two-digit subtraction that needs regrouping
-  var REGROUP_CASES = (function () {
-    var list = [];
-    for (var t = 3; t <= 9; t++) {
-      for (var s = 1; s < t; s++) {
-        for (var u = 0; u <= 8; u++) {
-          for (var v = u + 1; v <= 9; v++) { list.push([t, s, u, v]); }
-        }
-      }
-    }
-    return list;
-  })();
-
-  function makeRegrouping(i) {
-    var cs = REGROUP_CASES[pickIndex(i, REGROUP_CASES.length, 31)];
-    var t = cs[0], s = cs[1], u = cs[2], v = cs[3];
-    var T = 10 * t + u, B = 10 * s + v;
-    var d1 = v - u, d2 = t - s, W = 10 * d2 + d1;
-    var r1 = 10 + u - v, r2 = t - 1 - s, C = 10 * r2 + r1;
-    var accepted = [(10 + u) + '-' + v, (t - 1) + 'tens' + (10 + u), (t - 1) + 'tensand' + (10 + u), 'regroup', 'borrow'];
-    if (C >= 10) { accepted.push(String(C)); }
-    return {
-      problem: 'A student computed ' + T + ' \u2212 ' + B + ' and found a difference of ' + W + '. Examine the steps.',
-      problemCorrect: 'A student computed ' + T + ' \u2212 ' + B + ' and found a difference of ' + C + '. Examine the steps.',
-      steps: [
-        { text: 'Align the numbers by place value: ' + T + ' (minuend) above ' + B + ' (subtrahend).',
-          why: 'Step 1 is correct. The ones place is aligned with the ones place and the tens place with the tens place.' },
-        { text: 'Ones place: ' + v + ' \u2212 ' + u + ' = ' + d1 + '. (Subtract the smaller digit from the larger digit.)',
-          why: 'This is the error. The minuend has ' + u + ' in the ones place and the subtrahend has ' + v + '. Subtraction is not commutative, so the digits cannot be reversed to make the computation easier.' },
-        { text: 'Tens place: ' + t + ' \u2212 ' + s + ' = ' + d2 + '.',
-          why: t + ' \u2212 ' + s + ' = ' + d2 + ' is a correct computation, but the tens place should have been reduced by 1 when a ten was regrouped. The error began in step 2.' },
-        { text: 'The difference is ' + W + '.',
-          why: 'This step only states the result. The difference ' + W + ' is incorrect because of the error in step 2.' }
-      ],
-      mistake: 1,
-      hint: 'Can you subtract ' + v + ' from ' + u + ' in the ones place? How could you regroup 1 ten from the tens place?',
-      explanations: arrange(
-        { text: 'The digit ' + u + ' is less than ' + v + ', and subtraction is not commutative, so the digits cannot be reversed. Regroup 1 ten as 10 ones, so the ones place becomes ' + (10 + u) + ' \u2212 ' + v + '.',
-          correct: true,
-          response: 'Correct. ' + T + ' is ' + (t - 1) + ' tens and ' + (10 + u) + ' ones. Then ' + (10 + u) + ' \u2212 ' + v + ' = ' + r1 + ' and ' + (t - 1) + ' \u2212 ' + s + ' = ' + r2 + ', so the difference is ' + C + '.' },
-        [
-          { text: 'The digits in the ones place should be added, not subtracted.',
-            correct: false,
-            response: 'The operation is subtraction, so subtracting is correct. The error is in how the ones place was subtracted.' },
-          { text: 'You must begin with the tens place.',
-            correct: false,
-            response: 'The order of the places is not the error. The issue is what to do when the digit in the minuend is less than the digit in the subtrahend.' }
-        ], i),
-      accepted: accepted,
-      corrected: [
-        'Align the numbers by place value: ' + T + ' above ' + B + '.',
-        u + ' is less than ' + v + ', so regroup: ' + T + ' is ' + (t - 1) + ' tens and ' + (10 + u) + ' ones.',
-        'Ones place: ' + (10 + u) + ' \u2212 ' + v + ' = ' + r1 + '. Tens place: ' + (t - 1) + ' \u2212 ' + s + ' = ' + r2 + '.',
-        'The difference is ' + C + '.'
-      ],
-      reasoning: 'Subtraction is not commutative: ' + v + ' \u2212 ' + u + ' is not the same as ' + u + ' \u2212 ' + v + '. When the digit in the minuend is less than the digit in the subtrahend, regroup 1 ten as 10 ones.'
-    };
-  }
-
-  // Exhibit 3: adding fractions with unlike denominators
-  var FRACTION_CASES = (function () {
-    var dens = [2, 3, 4, 5, 6, 8, 10];
-    var list = [];
-    dens.forEach(function (d1) {
-      dens.forEach(function (d2) {
-        if (d1 !== d2) {
-          for (var n1 = 1; n1 < d1; n1++) {
-            for (var n2 = 1; n2 < d2; n2++) { list.push([n1, d1, n2, d2]); }
-          }
-        }
-      });
-    });
-    return list;
-  })();
-
-  function makeFractions(i) {
-    var cs = FRACTION_CASES[pickIndex(i, FRACTION_CASES.length, 37)];
-    var n1 = cs[0], d1 = cs[1], n2 = cs[2], d2 = cs[3];
-    var L = lcm(d1, d2);
-    var A = n1 * (L / d1), B = n2 * (L / d2), S = A + B;
-    var X = n1 + n2, Y = d1 + d2;
-    var f1 = n1 + '/' + d1, f2 = n2 + '/' + d2, wrongF = X + '/' + Y;
-    var larger = (n1 * d2 >= n2 * d1) ? f1 : f2;
-    var g = gcd(S, L);
-    var simple = (S / g) + '/' + (L / g);
-    var finalF = g > 1 ? simple : S + '/' + L;
-    return {
-      problem: 'A student added ' + f1 + ' + ' + f2 + ' and found a sum of ' + wrongF + '. Examine the steps.',
-      problemCorrect: 'A student added ' + f1 + ' + ' + f2 + ' and found a sum of ' + finalF + '. Examine the steps.',
-      steps: [
-        { text: f1 + ' + ' + f2,
-          why: 'Step 1 is correct. It is the original expression.' },
-        { text: 'Add the numerators: ' + n1 + ' + ' + n2 + ' = ' + X + '. Add the denominators: ' + d1 + ' + ' + d2 + ' = ' + Y + '.',
-          why: 'This is the error. The denominators ' + d1 + ' and ' + d2 + ' are unlike, so the fractions name different-sized parts. Numerators and denominators cannot simply be added separately. First write equivalent fractions with a common denominator.' },
-        { text: 'So ' + f1 + ' + ' + f2 + ' = ' + wrongF + '.',
-          why: 'This follows from step 2. The sum is incorrect because of that step.' },
-        { text: 'Check: ' + wrongF + ' is not greater than ' + larger + '.',
-          why: 'That statement is true, and it is a clue. The sum of two positive fractions must be greater than either addend, so ' + wrongF + ' cannot be correct. The error is earlier, in step 2.' }
-      ],
-      mistake: 1,
-      hint: 'Do the denominators ' + d1 + ' and ' + d2 + ' name equal-sized parts? Can you add fractions whose parts are different sizes?',
-      explanations: arrange(
-        { text: 'The denominators ' + d1 + ' and ' + d2 + ' are unlike. Write equivalent fractions with a common denominator before adding the numerators.',
-          correct: true,
-          response: 'Correct. Fractions can be added only when they have a common denominator, so that the parts are the same size.' },
-        [
-          { text: 'You should multiply the fractions instead of adding them.',
-            correct: false,
-            response: 'The problem calls for addition. Multiplication would be a different operation.' },
-          { text: n1 + ' + ' + n2 + ' does not equal ' + X + '.',
-            correct: false,
-            response: n1 + ' + ' + n2 + ' does equal ' + X + '. The error is that the denominators were also added, even though they are unlike.' }
-        ], i),
-      accepted: [A + '/' + L, B + '/' + L, S + '/' + L, simple, 'commondenominator'],
-      corrected: [
-        f1 + ' + ' + f2,
-        'Write equivalent fractions with the common denominator ' + L + ': ' + f1 + ' = ' + A + '/' + L + ' and ' + f2 + ' = ' + B + '/' + L,
-        A + '/' + L + ' + ' + B + '/' + L + ' = ' + S + '/' + L + (g > 1 ? ' = ' + simple : ''),
-        'The sum is ' + finalF + '.'
-      ],
-      reasoning: 'Fractions can be added only when they have a common denominator. With the denominator ' + L + ', add the numerators (' + A + ' + ' + B + ') and keep the denominator ' + L + '.'
-    };
-  }
-
-  // Exhibit 4: word problems. Eight kinds of error, including wrong operation, miscalculation,
-  // a missing step, unneeded information, and misreading a remainder.
-  var WORD_TYPES = 8;
-  var EQ_SCENES = [
-    { owner: 'A teacher', verb: 'buys', single: 'box', plural: 'boxes', item: 'markers',
-      extra: function (c) { return 'The class has ' + c + ' students.'; } },
-    { owner: 'A baker', verb: 'makes', single: 'tray', plural: 'trays', item: 'muffins',
-      extra: function (c) { return 'The bakery opens at ' + c + ' o\u2019clock.'; } },
-    { owner: 'A farmer', verb: 'packs', single: 'crate', plural: 'crates', item: 'apples',
-      extra: function (c) { return 'The farm has ' + c + ' workers.'; } },
-    { owner: 'A librarian', verb: 'arranges', single: 'shelf', plural: 'shelves', item: 'books',
-      extra: function (c) { return 'The library has ' + c + ' tables.'; } },
-    { owner: 'A coach', verb: 'orders', single: 'bag', plural: 'bags', item: 'soccer balls',
-      extra: function (c) { return 'The team has ' + c + ' players.'; } },
-    { owner: 'A gardener', verb: 'plants', single: 'row', plural: 'rows', item: 'tomato plants',
-      extra: function (c) { return 'The garden has ' + c + ' benches.'; } }
-  ];
-  var DIV_SCENES = [
-    { owner: 'A teacher', verb: 'shares', prep: 'among', item: 'pencils', groups: 'students', group: 'student', ask: 'does each student get' },
-    { owner: 'A baker', verb: 'packs', prep: 'into', item: 'muffins', groups: 'boxes', group: 'box', ask: 'are in each box' },
-    { owner: 'A librarian', verb: 'places', prep: 'on', item: 'books', groups: 'shelves', group: 'shelf', ask: 'are on each shelf' },
-    { owner: 'A coach', verb: 'shares', prep: 'among', item: 'stickers', groups: 'players', group: 'player', ask: 'does each player get' },
-    { owner: 'A farmer', verb: 'packs', prep: 'into', item: 'apples', groups: 'baskets', group: 'basket', ask: 'are in each basket' }
-  ];
-  var STOCK_SCENES = [
-    { owner: 'A library', item: 'books' },
-    { owner: 'A school', item: 'pencils' },
-    { owner: 'A store', item: 'notebooks' },
-    { owner: 'A bakery', item: 'muffins' },
-    { owner: 'A farm', item: 'apples' }
-  ];
-  var TRANSPORT_SCENES = [
-    { people: 'students', person: 'student', veh: 'van', vehs: 'vans' },
-    { people: 'players', person: 'player', veh: 'car', vehs: 'cars' },
-    { people: 'hikers', person: 'hiker', veh: 'boat', vehs: 'boats' },
-    { people: 'travelers', person: 'traveler', veh: 'bus', vehs: 'buses' },
-    { people: 'campers', person: 'camper', veh: 'tent', vehs: 'tents' }
-  ];
-  var IDENTIFIED = 'The quantities in the problem are identified correctly.';
-
-  var WORD_CASES = (function () {
-    var L = [[], [], [], [], [], [], [], []];
-    var a, b, c, g, k, q, r;
-    for (a = 4; a <= 12; a++) {
-      for (b = 3; b <= 9; b++) {
-        if (a !== b) { L[0].push([a, b]); }
-        for (c = 2; c <= 12; c++) { if (c !== a && c !== b && a !== b) { L[6].push([a, b, c]); } }
-      }
-    }
-    for (g = 3; g <= 9; g++) {
-      for (k = 3; k <= 12; k++) { if (g !== k) { L[1].push([g, k]); } }
-    }
-    for (a = 21; a <= 60; a++) {
-      for (b = 6; b <= 19; b++) { L[2].push([a, b]); }
-    }
-    for (a = 12; a <= 39; a++) {
-      for (b = 3; b <= 9; b++) { L[3].push([a, b]); }
-    }
-    for (a = 51; a <= 95; a++) {
-      for (b = 12; b <= 30; b++) { if (a % 10 < b % 10 && a - b >= 10) { L[4].push([a, b]); } }
-    }
-    for (a = 4; a <= 12; a++) {
-      for (b = 3; b <= 9; b++) {
-        for (c = 5; c <= 20; c++) { if (a * b - c >= 5) { L[5].push([a, b, c]); } }
-      }
-    }
-    for (k = 4; k <= 9; k++) {
-      for (q = 2; q <= 9; q++) {
-        for (r = 1; r < k; r++) { L[7].push([k * q + r, k, q, r]); }
-      }
-    }
-    return L;
-  })();
-
-  function finishWord(sp, i) {
-    return {
-      problem: sp.story + ' Examine the student\u2019s work.',
-      steps: oopSteps(sp),
-      mistake: sp.errorIndex,
-      hint: sp.hint,
-      explanations: arrange(
-        { text: sp.correct.text, correct: true, response: sp.correct.response },
-        sp.wrongs.map(function (w) { return { text: w.text, correct: false, response: w.response }; }),
-        i),
-      accepted: sp.accepted,
-      corrected: sp.corrected,
-      reasoning: sp.reasoning
-    };
-  }
-
-  var WORD_BUILDERS = [
-    // 0: wrong operation. Equal groups solved by addition.
-    function (cs, si) {
-      var sc = EQ_SCENES[si % EQ_SCENES.length], a = cs[0], b = cs[1], W = a + b, V = a * b;
-      var s0 = 'Identify the quantities: ' + b + ' ' + sc.plural + ' and ' + a + ' ' + sc.item + ' in each ' + sc.single + '.';
-      return {
-        story: sc.owner + ' ' + sc.verb + ' ' + b + ' ' + sc.plural + '. Each ' + sc.single + ' has ' + a + ' ' + sc.item + '. How many ' + sc.item + ' are there in all?',
-        errorIndex: 1, firstNote: IDENTIFIED,
-        steps: [s0, 'Choose the operation: addition. ' + a + ' + ' + b, a + ' + ' + b + ' = ' + W + '.', 'There are ' + W + ' ' + sc.item + ' in all.'],
-        errorWhy: 'The problem describes ' + b + ' equal groups with ' + a + ' in each group. Equal groups call for multiplication, not addition.',
-        hint: 'Does the problem describe equal groups, or two amounts that are joined?',
-        correct: { text: 'The problem describes equal groups, so the operation should be multiplication.',
-                   response: 'Correct. ' + b + ' equal groups of ' + a + ' is ' + b + ' ' + X + ' ' + a + ' = ' + V + '.' },
-        wrongs: [
-          { text: 'The addition ' + a + ' + ' + b + ' is computed incorrectly.',
-            response: a + ' + ' + b + ' = ' + W + ' is computed correctly. The error is the choice of operation.' },
-          { text: 'The problem should be solved by subtraction.',
-            response: 'Nothing in the problem asks how many more or fewer. Equal groups call for multiplication.' }
-        ],
-        accepted: [b + '*' + a, a + '*' + b, 'multipl', String(V)],
-        corrected: [s0, 'Choose the operation: multiplication (equal groups). ' + b + ' ' + X + ' ' + a, b + ' ' + X + ' ' + a + ' = ' + V + '.', 'There are ' + V + ' ' + sc.item + ' in all.'],
-        reasoning: 'Equal groups call for multiplication. ' + b + ' groups with ' + a + ' in each group gives ' + b + ' ' + X + ' ' + a + ' = ' + V + '.'
-      };
-    },
-    // 1: wrong operation. Equal sharing solved by multiplication.
-    function (cs, si) {
-      var sc = DIV_SCENES[si % DIV_SCENES.length], g = cs[0], k = cs[1], T = g * k, W = T * g;
-      var s0 = 'Identify the quantities: a total of ' + T + ' ' + sc.item + ' and ' + g + ' ' + sc.groups + '.';
-      var acc = [T + '/' + g, 'divid', 'division'];
-      if (k >= 10) { acc.push(String(k)); }
-      return {
-        story: sc.owner + ' ' + sc.verb + ' ' + T + ' ' + sc.item + ' equally ' + sc.prep + ' ' + g + ' ' + sc.groups + '. How many ' + sc.item + ' ' + sc.ask + '?',
-        errorIndex: 1, firstNote: IDENTIFIED,
-        steps: [s0, 'Choose the operation: multiplication. ' + T + ' ' + X + ' ' + g, T + ' ' + X + ' ' + g + ' = ' + W + '.', 'There are ' + W + ' ' + sc.item + ' for each ' + sc.group + '.'],
-        errorWhy: 'Sharing ' + T + ' ' + sc.item + ' equally among ' + g + ' ' + sc.groups + ' means separating a total into equal groups. This calls for division, not multiplication.',
-        hint: 'Is the total being combined into a larger amount, or separated into equal shares?',
-        correct: { text: 'Sharing a total equally calls for division, so the operation should be division.',
-                   response: 'Correct. ' + T + ' ' + D + ' ' + g + ' = ' + k + ', so there are ' + k + ' ' + sc.item + ' for each ' + sc.group + '.' },
-        wrongs: [
-          { text: 'The multiplication ' + T + ' ' + X + ' ' + g + ' is computed incorrectly.',
-            response: T + ' ' + X + ' ' + g + ' = ' + W + ' is computed correctly. The error is the choice of operation.' },
-          { text: 'The problem should be solved by subtraction.',
-            response: 'Subtraction finds a difference. Sharing a total equally calls for division.' }
-        ],
-        accepted: acc,
-        corrected: [s0, 'Choose the operation: division. ' + T + ' ' + D + ' ' + g, T + ' ' + D + ' ' + g + ' = ' + k + '.', 'There are ' + k + ' ' + sc.item + ' for each ' + sc.group + '.'],
-        reasoning: 'Sharing equally calls for division. ' + T + ' ' + sc.item + ' separated into ' + g + ' equal groups gives ' + T + ' ' + D + ' ' + g + ' = ' + k + ' in each group.'
-      };
-    },
-    // 2: wrong operation. Joining solved by subtraction.
-    function (cs, si) {
-      var sc = STOCK_SCENES[si % STOCK_SCENES.length], a = cs[0], b = cs[1], W = a - b, V = a + b;
-      var s0 = 'Identify the quantities: ' + a + ' ' + sc.item + ' at the start and ' + b + ' more added.';
-      return {
-        story: sc.owner + ' has ' + a + ' ' + sc.item + '. Then ' + b + ' more ' + sc.item + ' are added. How many ' + sc.item + ' are there now?',
-        errorIndex: 1, firstNote: IDENTIFIED,
-        steps: [s0, 'Choose the operation: subtraction. ' + a + ' ' + M + ' ' + b, a + ' ' + M + ' ' + b + ' = ' + W + '.', 'There are ' + W + ' ' + sc.item + ' now.'],
-        errorWhy: 'More ' + sc.item + ' are added, so the total increases. Joining amounts calls for addition, not subtraction.',
-        hint: 'Does the total become larger or smaller when more ' + sc.item + ' are added?',
-        correct: { text: 'Adding more items increases the total, so the operation should be addition.',
-                   response: 'Correct. ' + a + ' + ' + b + ' = ' + V + '.' },
-        wrongs: [
-          { text: 'The subtraction ' + a + ' ' + M + ' ' + b + ' is computed incorrectly.',
-            response: a + ' ' + M + ' ' + b + ' = ' + W + ' is computed correctly. The error is the choice of operation.' },
-          { text: 'The problem should be solved by multiplication.',
-            response: 'The problem does not describe equal groups. Joining two amounts calls for addition.' }
-        ],
-        accepted: [a + '+' + b, b + '+' + a, 'add', String(V)],
-        corrected: [s0, 'Choose the operation: addition. ' + a + ' + ' + b, a + ' + ' + b + ' = ' + V + '.', 'There are ' + V + ' ' + sc.item + ' now.'],
-        reasoning: 'Joining two amounts calls for addition. ' + a + ' + ' + b + ' = ' + V + '.'
-      };
-    },
-    // 3: miscalculation in a product (correct operation)
-    function (cs, si) {
-      var sc = EQ_SCENES[si % EQ_SCENES.length], a = cs[0], b = cs[1], V = a * b;
-      var W = V + (((a + b) % 2 === 0) ? 10 : -10);
-      var s0 = 'Identify the quantities: ' + b + ' ' + sc.plural + ' and ' + a + ' ' + sc.item + ' in each ' + sc.single + '.';
-      var s1 = 'Choose the operation: multiplication (equal groups). ' + b + ' ' + X + ' ' + a;
-      return {
-        story: sc.owner + ' ' + sc.verb + ' ' + b + ' ' + sc.plural + '. Each ' + sc.single + ' has ' + a + ' ' + sc.item + '. How many ' + sc.item + ' are there in all?',
-        errorIndex: 2, firstNote: IDENTIFIED,
-        okNote: 'Equal groups call for multiplication, so this operation is correct.',
-        steps: [s0, s1, b + ' ' + X + ' ' + a + ' = ' + W + '.', 'There are ' + W + ' ' + sc.item + ' in all.'],
-        errorWhy: 'The operation is correct, but the product is not. ' + b + ' ' + X + ' ' + a + ' = ' + V + ', not ' + W + '. Multiplying the tens and the ones separately and adding the partial products finds the error.',
-        hint: 'The operation is correct. Estimate the product by rounding ' + a + ' to the nearest ten. Is the product reasonable?',
-        correct: { text: 'The operation is correct, but the product ' + b + ' ' + X + ' ' + a + ' was computed incorrectly.',
-                   response: 'Correct. ' + b + ' ' + X + ' ' + a + ' = ' + V + '.' },
-        wrongs: [
-          { text: 'Equal groups should be solved by addition.',
-            response: 'Equal groups call for multiplication, which was the operation chosen. The error is in the computation.' },
-          { text: 'The unit ' + sc.item + ' is missing from the final statement.',
-            response: 'The final statement includes the unit ' + sc.item + '. The error is in the product.' }
-        ],
-        accepted: [String(V)],
-        corrected: [s0, s1, b + ' ' + X + ' ' + a + ' = ' + V + '.', 'There are ' + V + ' ' + sc.item + ' in all.'],
-        reasoning: 'Equal groups call for multiplication. Using partial products, ' + b + ' ' + X + ' ' + a + ' = ' + V + '.'
-      };
-    },
-    // 4: miscalculation in a difference (regrouping not done)
-    function (cs, si) {
-      var sc = STOCK_SCENES[si % STOCK_SCENES.length], a = cs[0], b = cs[1], V = a - b, W = V + 10;
-      var u = a % 10, v = b % 10;
-      var s0 = 'Identify the quantities: ' + a + ' ' + sc.item + ' at the start and ' + b + ' given away.';
-      var s1 = 'Choose the operation: subtraction. ' + a + ' ' + M + ' ' + b;
-      return {
-        story: sc.owner + ' has ' + a + ' ' + sc.item + '. Then ' + b + ' ' + sc.item + ' are given away. How many ' + sc.item + ' are left?',
-        errorIndex: 2, firstNote: IDENTIFIED,
-        okNote: 'Items given away decrease the total, so subtraction is correct.',
-        steps: [s0, s1, a + ' ' + M + ' ' + b + ' = ' + W + '.', 'There are ' + W + ' ' + sc.item + ' left.'],
-        errorWhy: 'The operation is correct, but the difference is not. ' + a + ' ' + M + ' ' + b + ' = ' + V + ', not ' + W + '. The digit ' + u + ' in the ones place of ' + a + ' is less than ' + v + ', so the tens place must be regrouped.',
-        hint: 'The operation is correct. Compare the ones places: is ' + u + ' less than ' + v + '? What must be done to the tens place?',
-        correct: { text: 'The operation is correct, but the difference was computed incorrectly because the tens place was not regrouped.',
-                   response: 'Correct. Regroup 1 ten as 10 ones: ' + a + ' ' + M + ' ' + b + ' = ' + V + '.' },
-        wrongs: [
-          { text: 'The operation should be addition.',
-            response: 'Items are given away, so the total decreases. Subtraction was the correct operation.' },
-          { text: 'The unit ' + sc.item + ' is missing from the final statement.',
-            response: 'The final statement includes the unit ' + sc.item + '. The error is in the difference.' }
-        ],
-        accepted: [String(V), 'regroup', 'borrow'],
-        corrected: [s0, s1, a + ' ' + M + ' ' + b + ' = ' + V + '.', 'There are ' + V + ' ' + sc.item + ' left.'],
-        reasoning: 'When a digit in the ones place of the minuend is less than the digit in the ones place of the subtrahend, regroup 1 ten as 10 ones. ' + a + ' ' + M + ' ' + b + ' = ' + V + '.'
-      };
-    },
-    // 5: a missing step in a two-step problem
-    function (cs, si) {
-      var sc = EQ_SCENES[si % EQ_SCENES.length], a = cs[0], b = cs[1], c = cs[2], p = a * b, V = p - c;
-      var s0 = 'Identify the quantities: ' + b + ' ' + sc.plural + ' with ' + a + ' ' + sc.item + ' in each ' + sc.single + ', and ' + c + ' ' + sc.item + ' given away.';
-      var s1 = 'Find the total: ' + b + ' ' + X + ' ' + a + ' = ' + p + '.';
-      var acc = [p + '-' + c, 'subtract'];
-      if (V >= 10) { acc.push(String(V)); }
-      return {
-        story: sc.owner + ' ' + sc.verb + ' ' + b + ' ' + sc.plural + '. Each ' + sc.single + ' has ' + a + ' ' + sc.item + '. Then ' + c + ' ' + sc.item + ' are given away. How many ' + sc.item + ' are left?',
-        errorIndex: 2, firstNote: IDENTIFIED,
-        okNote: 'The total is found correctly with multiplication.',
-        steps: [s0, s1, 'The amount left is ' + p + '.', 'There are ' + p + ' ' + sc.item + ' left.'],
-        errorWhy: 'The problem has two steps. After finding the total, the ' + c + ' ' + sc.item + ' given away must be subtracted.',
-        hint: 'How many steps does the problem require? What happens to the total after the ' + sc.item + ' are given away?',
-        correct: { text: 'The problem has two steps, and the second step, subtracting the ' + c + ' ' + sc.item + ' given away, was omitted.',
-                   response: 'Correct. ' + p + ' ' + M + ' ' + c + ' = ' + V + ', so ' + V + ' ' + sc.item + ' are left.' },
-        wrongs: [
-          { text: 'The multiplication ' + b + ' ' + X + ' ' + a + ' is computed incorrectly.',
-            response: b + ' ' + X + ' ' + a + ' = ' + p + ' is computed correctly. The error is that a step is missing.' },
-          { text: 'The ' + c + ' ' + sc.item + ' should have been added to the total.',
-            response: sc.item.charAt(0).toUpperCase() + sc.item.slice(1) + ' given away decrease the total, so they are subtracted, not added.' }
-        ],
-        accepted: acc,
-        corrected: [s0, s1, 'Subtract the ' + sc.item + ' given away: ' + p + ' ' + M + ' ' + c + ' = ' + V + '.', 'There are ' + V + ' ' + sc.item + ' left.'],
-        reasoning: 'A two-step problem needs two operations. First ' + b + ' ' + X + ' ' + a + ' = ' + p + ', and then ' + p + ' ' + M + ' ' + c + ' = ' + V + '.'
-      };
-    },
-    // 6: unneeded information used in the computation
-    function (cs, si) {
-      var sc = EQ_SCENES[si % EQ_SCENES.length], a = cs[0], b = cs[1], c = cs[2], W = a * c, V = a * b;
-      var s0 = 'Choose the operation: multiplication (equal groups).';
-      var s1b = 'Choose the quantities: ' + b + ' ' + sc.plural + ' and ' + a + ' ' + sc.item + ' in each ' + sc.single + '.';
-      return {
-        story: sc.owner + ' ' + sc.verb + ' ' + b + ' ' + sc.plural + '. Each ' + sc.single + ' has ' + a + ' ' + sc.item + '. ' + sc.extra(c) + ' How many ' + sc.item + ' are there in all?',
-        errorIndex: 1, firstNote: 'Equal groups call for multiplication, so this operation is correct.',
-        steps: [s0, 'Choose the quantities: ' + a + ' and ' + c + '.', a + ' ' + X + ' ' + c + ' = ' + W + '.', 'There are ' + W + ' ' + sc.item + ' in all.'],
-        errorWhy: 'The number ' + c + ' does not describe the number of ' + sc.plural + ' or the number of ' + sc.item + ' in each ' + sc.single + '. It is extra information that is not needed.',
-        hint: 'Which numbers describe the number of equal groups and the size of each group? Is every number in the problem needed?',
-        correct: { text: 'The number ' + c + ' is extra information, and the quantities that are needed are ' + b + ' and ' + a + '.',
-                   response: 'Correct. The ' + b + ' ' + sc.plural + ' and the ' + a + ' ' + sc.item + ' in each ' + sc.single + ' are needed, so ' + b + ' ' + X + ' ' + a + ' = ' + V + '.' },
-        wrongs: [
-          { text: 'The operation should be addition.',
-            response: 'Equal groups call for multiplication, which was the operation chosen. The error is in which numbers were used.' },
-          { text: 'The product ' + a + ' ' + X + ' ' + c + ' is computed incorrectly.',
-            response: a + ' ' + X + ' ' + c + ' = ' + W + ' is computed correctly. The error is in which numbers were used.' }
-        ],
-        accepted: [b + '*' + a, a + '*' + b, b + sc.plural + 'and' + a, b + 'and' + a, a + 'and' + b, String(V)],
-        corrected: [s0, s1b, b + ' ' + X + ' ' + a + ' = ' + V + '.', 'There are ' + V + ' ' + sc.item + ' in all.'],
-        reasoning: 'Only the quantities that describe the groups are needed. ' + b + ' groups with ' + a + ' in each group gives ' + b + ' ' + X + ' ' + a + ' = ' + V + '. The number ' + c + ' is not used.'
-      };
-    },
-    // 7: a remainder that is misinterpreted
-    function (cs, si) {
-      var sc = TRANSPORT_SCENES[si % TRANSPORT_SCENES.length], n = cs[0], k = cs[1], q = cs[2], r = cs[3];
-      var who = (r === 1) ? '1 ' + sc.person : r + ' ' + sc.people;
-      var isAre = (r === 1) ? 'is' : 'are';
-      var needs = (r === 1) ? 'needs' : 'need';
-      var s0 = 'Identify the quantities: ' + n + ' ' + sc.people + ' and ' + k + ' ' + sc.people + ' in each ' + sc.veh + '.';
-      var s1 = 'Choose the operation: division. ' + n + ' ' + D + ' ' + k;
-      var s2 = n + ' ' + D + ' ' + k + ' = ' + q + ' remainder ' + r + '.';
-      var acc = [q + '+1', (q + 1) + sc.vehs, 'roundup', 'roundedup', 'extra', 'another', 'oneadditional'];
-      if (q + 1 >= 10) { acc.push(String(q + 1)); }
-      return {
-        story: 'A group of ' + n + ' ' + sc.people + ' is split into ' + sc.vehs + '. Each ' + sc.veh + ' holds ' + k + ' ' + sc.people + '. What is the least number of ' + sc.vehs + ' needed?',
-        errorIndex: 3, firstNote: IDENTIFIED,
-        okNote: 'The operation and the quotient with remainder are correct.',
-        steps: [s0, s1, s2, 'The remainder is ignored, so ' + q + ' ' + sc.vehs + ' are needed.'],
-        errorWhy: 'The remainder ' + r + ' means ' + who + ' ' + isAre + ' left without a ' + sc.veh + '. Another ' + sc.veh + ' is needed, so the quotient must be increased by 1.',
-        hint: 'What does the remainder represent in this situation? Can the ' + (r === 1 ? '1 remaining ' + sc.person : r + ' remaining ' + sc.people) + ' travel without a ' + sc.veh + '?',
-        correct: { text: 'The remainder represents ' + sc.people + ' who still need a ' + sc.veh + ', so the quotient must be increased by 1.',
-                   response: 'Correct. ' + n + ' ' + D + ' ' + k + ' = ' + q + ' remainder ' + r + ', so ' + (q + 1) + ' ' + sc.vehs + ' are needed.' },
-        wrongs: [
-          { text: 'The division ' + n + ' ' + D + ' ' + k + ' is computed incorrectly.',
-            response: n + ' ' + D + ' ' + k + ' = ' + q + ' remainder ' + r + ' is computed correctly. The error is in interpreting the remainder.' },
-          { text: 'The problem should be solved by multiplication.',
-            response: 'Splitting a group into equal ' + sc.vehs + ' calls for division, which was used. The error is in interpreting the remainder.' }
-        ],
-        accepted: acc,
-        corrected: [s0, s1, s2, 'The remainder ' + r + ' means ' + who + ' still ' + needs + ' a ' + sc.veh + ', so ' + q + ' + 1 = ' + (q + 1) + ' ' + sc.vehs + ' are needed.'],
-        reasoning: 'A remainder in this situation means more ' + sc.people + ' still need a ' + sc.veh + ', so the quotient is increased by 1. ' + q + ' + 1 = ' + (q + 1) + '.'
-      };
-    }
-  ];
-
-  function makeWordProblem(i) {
-    var type = i % WORD_TYPES;
-    var k = Math.floor(i / WORD_TYPES);
-    var list = WORD_CASES[type];
-    var cs = list[pickIndex(k, list.length, 5)];
-    return finishWord(WORD_BUILDERS[type](cs, k + type), i);
-  }
-
-  var EXHIBITS = [
-    { navLabel: 'Order of Operations', title: 'Which Operation Comes First?', make: makeOrderOfOperations },
-    { navLabel: 'Regrouping', title: 'Regrouping Across Place Value', make: makeRegrouping },
-    { navLabel: 'Fractions', title: 'Unlike Denominators', make: makeFractions },
-    { navLabel: 'Word Problems', title: 'Reasoning in Context', make: makeWordProblem },
-    { navLabel: 'Anything Goes', title: 'Anything Goes', mixed: true }
-  ];
-
-  // About one problem in five has no error at all. The pattern is irregular so it cannot be guessed.
-  function hasNoError(i) { var r = i % 10; return r === 1 || r === 4; }
-
-  // Turns an erroneous problem into an error-free one by showing the corrected steps as the student's work.
-  function toErrorFree(pr) {
-    var n = pr.corrected.length;
-    var steps = pr.corrected.map(function (text, k) {
-      var why;
-      if (k === 0) { why = 'Step 1 is correct. It restates the problem accurately.'; }
-      else if (k === n - 1) { why = 'Step ' + (k + 1) + ' is correct. It states the result of the previous steps accurately.'; }
-      else { why = 'Step ' + (k + 1) + ' is correct. The operation and the computation are both valid.'; }
-      return { text: text, why: why };
-    });
-    return {
-      problem: pr.problemCorrect || pr.problem,
-      steps: steps,
-      mistake: -1,
-      hint: 'Check every step. Is each operation appropriate, and is each computation accurate?',
-      explanations: pr.explanations,
-      accepted: [],
-      corrected: pr.corrected,
-      reasoning: pr.reasoning
-    };
-  }
-
-  // "Anything Goes" draws from the four other exhibits in a scrambled but repeatable order,
-  // using problems from further along in each exhibit so they do not repeat those exhibits.
-  var MIX_MAP = (function () {
-    var counts = [0, 0, 0, 0], map = [];
-    for (var i = 0; i < PROBLEMS_PER_EXHIBIT; i++) {
-      var h = Math.imul(i + 1, 2654435761) >>> 0;
-      var src = (h >>> 13) % 4;
-      map.push({ source: src, index: PROBLEMS_PER_EXHIBIT + counts[src] });
-      counts[src] += 1;
-    }
-    return map;
-  })();
-
-  function makeProblem(exIndex, i) {
-    var def = EXHIBITS[exIndex];
-    var src = exIndex, idx = i;
-    if (def.mixed) { src = MIX_MAP[i].source; idx = MIX_MAP[i].index; }
-    var pr = EXHIBITS[src].make(idx);
-    if (hasNoError(idx)) { pr = toErrorFree(pr); }
-    pr.title = def.title;
-    return pr;
-  }
-
-  /* ---------- Helpers ---------- */
-  var current = 0;
-  var pos = [0, 0, 0, 0, 0]; // which problem (0 to 199) each exhibit is on; kept in memory only
-
-  var navEl = document.getElementById('nav');
-  var rootEl = document.getElementById('exhibit');
-
-  // Builds elements with textContent only, so nothing typed or stored is ever parsed as HTML.
-  function el(tag, props, text) {
-    var n = document.createElement(tag);
-    if (props) {
-      Object.keys(props).forEach(function (k) {
-        if (k === 'class') { n.className = props[k]; }
-        else { n.setAttribute(k, props[k]); }
-      });
-    }
-    if (text !== undefined && text !== null) { n.textContent = text; }
-    return n;
-  }
-
-  // Makes typed answers easier to compare: lowercase, no spaces, x and × read as multiply.
-  function norm(s) {
-    return String(s).toLowerCase()
-      .replace(/\u00F7/g, '/')
-      .replace(/[\u2212\u2013\u2014]/g, '-')
-      .replace(/(\d)\s*[x\u00D7*]\s*(?=[\d(])/g, '$1*')
-      .replace(/\s+/g, '');
-  }
-
-  function selectedValue(name) {
-    var n = rootEl.querySelector('input[name="' + name + '"]:checked');
-    return n ? parseInt(n.value, 10) : null;
-  }
-
-  /* ---------- Navigation ---------- */
-  function renderNav() {
-    navEl.textContent = '';
-    EXHIBITS.forEach(function (ex, i) {
-      var b = el('button', { type: 'button' }, 'Exhibit ' + (i + 1) + ': ' + ex.navLabel);
-      if (i === current) { b.setAttribute('aria-current', 'true'); }
-      b.addEventListener('click', function () {
-        current = i;
-        renderNav();
-        renderExhibit(true);
-      });
-      navEl.appendChild(b);
-    });
-  }
-
-  /* ---------- Exhibit ---------- */
-  function renderExhibit(moveFocus) {
-    var ex = makeProblem(current, pos[current]);
-    rootEl.textContent = '';
-
-    var h2 = el('h2', { id: 'exhibit-title', tabindex: '-1' }, ex.title);
-    h2.appendChild(el('span', { class: 'progress' }, 'Problem ' + (pos[current] + 1) + ' of ' + PROBLEMS_PER_EXHIBIT));
-    rootEl.appendChild(h2);
-    rootEl.appendChild(el('p', { class: 'problem' }, ex.problem));
-
-    // 1. Choose the first erroneous step, or "No errors"
-    var fs1 = el('fieldset');
-    fs1.appendChild(el('legend', null, '1. Choose the first step that contains an error, or choose \u201CNo errors.\u201D'));
-    ex.steps.forEach(function (s, i) {
-      var id = 'step-' + i;
-      var lab = el('label', { class: 'choice', 'for': id });
-      lab.appendChild(el('input', { type: 'radio', name: 'step', id: id, value: String(i) }));
-      lab.appendChild(el('span', { class: 'num' }, 'Step ' + (i + 1)));
-      lab.appendChild(el('span', { class: 'txt' }, s.text));
-      fs1.appendChild(lab);
-    });
-    var noLab = el('label', { class: 'choice', 'for': 'step-none' });
-    noLab.appendChild(el('input', { type: 'radio', name: 'step', id: 'step-none', value: '-1' }));
-    noLab.appendChild(el('span', { class: 'txt' }, 'No errors'));
-    fs1.appendChild(noLab);
-    rootEl.appendChild(fs1);
-
-    // 2. Choose an explanation
-    var fs2 = el('fieldset', { id: 'why-set' });
-    fs2.appendChild(el('legend', null, '2. Why is it an error?'));
-    ex.explanations.forEach(function (e, i) {
-      var id = 'why-' + i;
-      var lab = el('label', { class: 'choice', 'for': id });
-      lab.appendChild(el('input', { type: 'radio', name: 'why', id: id, value: String(i) }));
-      lab.appendChild(el('span', { class: 'txt' }, e.text));
-      fs2.appendChild(lab);
-    });
-    rootEl.appendChild(fs2);
-
-    // 3. Type a correction
-    var FIX_NOTE = 'Type the corrected step. This part is optional.';
-    var box = el('div', { style: 'margin-bottom:1.5rem' });
-    box.appendChild(el('label', { class: 'field-label', 'for': 'fix' }, '3. Rewrite the erroneous step correctly'));
-    var fixNote = el('p', { class: 'field-note', id: 'fix-note' }, FIX_NOTE);
-    box.appendChild(fixNote);
-    var fixInput = el('input', { type: 'text', id: 'fix', maxlength: '80', autocomplete: 'off', 'aria-describedby': 'fix-note' });
-    box.appendChild(fixInput);
-    rootEl.appendChild(box);
-
-    // Parts 2 and 3 do not apply when the student chooses "No errors".
-    function syncOptional() {
-      var none = selectedValue('step') === -1;
-      fs2.disabled = none;
-      fixInput.disabled = none;
-      if (none) {
-        var checked = fs2.querySelector('input:checked');
-        if (checked) { checked.checked = false; }
-        fixInput.value = '';
-        fixNote.textContent = 'Not needed when you choose No errors.';
-      } else {
-        fixNote.textContent = FIX_NOTE;
-      }
-    }
-    fs1.addEventListener('change', syncOptional);
-
-    // Actions
-    var actions = el('div', { class: 'actions' });
-    var checkBtn = el('button', { type: 'button', class: 'primary', id: 'check-btn' }, 'Check');
-    var hintBtn = el('button', { type: 'button', id: 'hint-btn', 'aria-expanded': 'false', 'aria-controls': 'hint' }, 'Show hint');
-    var solBtn = el('button', { type: 'button', id: 'sol-btn', 'aria-expanded': 'false', 'aria-controls': 'solution' }, 'Show solution');
-    var resetBtn = el('button', { type: 'button', id: 'reset-btn' }, 'Reset this problem');
-    var newBtn = el('button', { type: 'button', id: 'new-btn' }, pos[current] === PROBLEMS_PER_EXHIBIT - 1 ? 'Back to problem 1' : 'New problem');
-    [checkBtn, hintBtn, solBtn, newBtn, resetBtn].forEach(function (b) { actions.appendChild(b); });
-    rootEl.appendChild(actions);
-
-    // Hint, feedback, solution regions
-    var hint = el('div', { class: 'hint', id: 'hint', hidden: '' });
-    hint.appendChild(el('p', null, ex.hint));
-    rootEl.appendChild(hint);
-
-    var feedback = el('div', { id: 'feedback', tabindex: '-1', 'aria-live': 'polite' });
-    rootEl.appendChild(feedback);
-
-    var solution = el('section', { class: 'solution', id: 'solution', hidden: '', 'aria-labelledby': 'sol-title' });
-    solution.appendChild(el('h3', { id: 'sol-title' }, ex.mistake === -1 ? 'Solution' : 'Corrected solution'));
-    if (ex.mistake === -1) { solution.appendChild(el('p', { style: 'margin-bottom:0.5rem' }, 'The student\u2019s work contains no errors.')); }
-    var ol = el('ol');
-    ex.corrected.forEach(function (line) { ol.appendChild(el('li', null, line)); });
-    solution.appendChild(ol);
-    solution.appendChild(el('p', null, ex.reasoning));
-    rootEl.appendChild(solution);
-
-    /* ----- Behavior ----- */
-    function setHint(on) {
-      hint.hidden = !on;
-      hintBtn.setAttribute('aria-expanded', on ? 'true' : 'false');
-      hintBtn.textContent = on ? 'Hide hint' : 'Show hint';
-    }
-    function setSolution(on) {
-      solution.hidden = !on;
-      solBtn.setAttribute('aria-expanded', on ? 'true' : 'false');
-      solBtn.textContent = on ? 'Hide solution' : 'Show solution';
-    }
-    function addResult(kind, label, message) {
-      var d = el('div', { class: 'result ' + kind });
-      d.appendChild(el('strong', null, label));
-      d.appendChild(el('p', null, message));
-      feedback.appendChild(d);
-    }
-
-    function runCheck() {
-      var stepPick = selectedValue('step');   // null, -1 (No errors), or a step number
-      var whyPick = selectedValue('why');
-      var typed = fixInput.value.trim();
-      var noErr = (ex.mistake === -1);
-      feedback.textContent = '';
-
-      var heading = el('h3', { tabindex: '-1' }, 'Feedback');
-      feedback.appendChild(heading);
-
-      if (stepPick === null && whyPick === null && typed === '') {
-        addResult('info', 'Nothing to check yet', 'Choose a step or \u201CNo errors,\u201D then press Check.');
-        heading.focus();
-        return;
-      }
-
-      var stepOk = false;
-      var whyOk = false;
-
-      // Step (or "No errors")
-      if (stepPick === null) {
-        addResult('info', 'Step: not chosen', 'Choose the first step that contains an error, or choose No errors.');
-      } else if (stepPick === -1) {
-        if (noErr) {
-          stepOk = true;
-          addResult('ok', 'No errors: correct', 'Every step is correct. Each operation is appropriate and each computation is accurate.');
-        } else {
-          addResult('no', 'No errors: not quite', 'This work does contain an error. Examine each step again, checking the operations and every computation.');
-        }
-      } else if (stepPick === ex.mistake) {
-        stepOk = true;
-        addResult('ok', 'Step ' + (stepPick + 1) + ': correct', ex.steps[stepPick].why);
-      } else if (noErr) {
-        addResult('no', 'Step ' + (stepPick + 1) + ': not an error', ex.steps[stepPick].why);
-      } else {
-        addResult('no', 'Step ' + (stepPick + 1) + ': not the first error', ex.steps[stepPick].why);
-      }
-
-      // Explanation and rewritten step only apply when a step was chosen as the error
-      if (!noErr && stepPick !== -1) {
-        if (whyPick === null) {
-          addResult('info', 'Explanation: not chosen', 'Choose the explanation that fits the error.');
-        } else if (ex.explanations[whyPick].correct) {
-          whyOk = true;
-          addResult('ok', 'Explanation: correct', ex.explanations[whyPick].response);
-        } else {
-          addResult('no', 'Explanation: not quite', ex.explanations[whyPick].response);
-        }
-
-        // Typed correction (only ever compared, never inserted into the page)
-        if (typed === '') {
-          addResult('info', 'Your rewritten step: empty', 'Type a corrected step above and press Check again to compare it.');
-        } else {
-          var n = norm(typed);
-          var match = ex.accepted.some(function (t) { return n.indexOf(norm(t)) !== -1; });
-          if (match) {
-            addResult('ok', 'Your rewritten step: looks right', 'It matches a correct way to fix the step. Compare it with the corrected solution to be sure.');
-          } else {
-            addResult('info', 'Your rewritten step: cannot tell', 'This tool cannot always read typed corrections. Open the solution and compare it with yours.');
-          }
-        }
-      }
-
-      // Overall
-      if (stepOk && noErr) {
-        addResult('ok', 'You checked every step', 'No errors were found. The solution is shown below. Press New problem when you are ready to continue.');
-        setSolution(true);
-      } else if (stepOk && whyOk) {
-        addResult('ok', 'You found and explained the error', 'Well done. The corrected solution is shown below. Press New problem when you are ready to continue.');
-        setSolution(true);
-      } else {
-        addResult('info', 'Try again', 'Change your choices and press Check. Press Show hint if you need help.');
-      }
-      heading.focus();
-    }
-
-    checkBtn.addEventListener('click', runCheck);
-    hintBtn.addEventListener('click', function () { setHint(hint.hidden); });
-    solBtn.addEventListener('click', function () { setSolution(solution.hidden); });
-    resetBtn.addEventListener('click', function () { renderExhibit(true); });
-    newBtn.addEventListener('click', function () {
-      pos[current] = (pos[current] + 1) % PROBLEMS_PER_EXHIBIT;
-      renderExhibit(true);
-    });
-    fixInput.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') { e.preventDefault(); runCheck(); }
-    });
-
-    if (moveFocus) { h2.focus(); }
-  }
-
-  renderNav();
-  renderExhibit(false);
+  $('btnFull').addEventListener('click', function () {
+    var f = $('frame');
+    if (document.fullscreenElement) { document.exitFullscreen(); }
+    else if (f.requestFullscreen) { f.requestFullscreen(); }
+  });
+  window.addEventListener('hashchange', route);
+  route();
 })();
 </script>
 </body>
